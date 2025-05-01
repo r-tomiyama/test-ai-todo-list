@@ -1,5 +1,6 @@
 import { initTRPC } from "@trpc/server";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import superjson from "superjson";
 import { PrismaClient } from "../__generated__/prisma";
 
 // Prismaクライアントのグローバルインスタンスを作成
@@ -26,7 +27,9 @@ export const createTRPCContext = async (
 /**
  * tRPCインスタンスの初期化
  */
-const t = initTRPC.context<TRPCContext>().create();
+const t = initTRPC.context<TRPCContext>().create({
+  transformer: superjson,
+});
 
 /**
  * tRPCルーター作成のためのヘルパー
