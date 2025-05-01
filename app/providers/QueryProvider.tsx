@@ -3,6 +3,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState, ReactNode } from 'react';
+import { httpBatchLink } from '@trpc/client';
+import { trpc } from '../utils/trpc';
 
 interface QueryProviderProps {
   children: ReactNode;
@@ -21,10 +23,28 @@ export default function QueryProvider({ children }: QueryProviderProps) {
       })
   );
 
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: '/api/trpc',
+          // 必要に応じてカスタムヘッダーを追加
+          // headers() {
+          //   return {
+          //     // カスタムヘッダー
+          //   };
+          // },
+        }),
+      ],
+    })
+  );
+
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 }

@@ -1,87 +1,62 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+'use client';
 
-// Types
-interface Todo {
-  id: string;
-  title: string;
-  completed: boolean;
-}
+import { trpc } from '../utils/trpc';
+import { Todo } from '@prisma/client';
 
-// API Functions
-async function fetchTodos(): Promise<Todo[]> {
-  const response = await fetch('/api/todos');
-  if (!response.ok) {
-    throw new Error('Failed to fetch todos');
-  }
-  return response.json();
-}
-
-async function createTodo(title: string): Promise<Todo> {
-  const response = await fetch('/api/todos', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title }),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create todo');
-  }
-  return response.json();
-}
-
-async function updateTodo(id: string, completed: boolean): Promise<Todo> {
-  const response = await fetch('/api/todos', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, completed }),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update todo');
-  }
-  return response.json();
-}
-
-async function deleteTodo(id: string): Promise<void> {
-  const response = await fetch('/api/todos', {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id }),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to delete todo');
-  }
-}
-
-// Hooks
-export function useTodos() {
-  const queryClient = useQueryClient();
+export const useTodos = () => {
+  // Todoリストの取得
+  const { data: todos, isLoading, refetch } = trpc.todo.getAll.useQuery();
   
-  const todosQuery = useQuery({
-    queryKey: ['todos'],
-    queryFn: fetchTodos,
+  // Todo作成のミューテーション
+  const createTodoMutation = trpc.todo.create.useMutation({
+    onSuccess: () => refetch(),
+  });
+  
+  // Todo更新のミューテーション
+  const updateTodoMutation = trpc.todo.update.useMutation({
+    onSuccess: () => refetch(),
+  });
+  
+  // Todo削除のミューテーション
+  const deleteTodoMutation = trpc.todo.delete.useMutation({
+    onSuccess: () => refetch(),
+  });
+  
+  // Todo完了状態切り替えのミューテーション
+  const toggleTodoMutation = trpc.todo.toggle.useMutation({
+    onSuccess: () => refetch(),
   });
 
-  const createTodoMutation = useMutation({
-    mutationFn: createTodo,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
-
-  const updateTodoMutation = useMutation({
-    mutationFn: ({ id, completed }: { id: string; completed: boolean }) => updateTodo(id, completed),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
-
-  const deleteTodoMutation = useMutation({
-    mutationFn: deleteTodo,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
-  });
+  // Todo作成関数
+  const createTodo = async (title: string) => {
+    await createTodoMutation.mutateAsync({ title });
+  };
+  
+  // Todo更新関数
+  const updateTodo = async (id: number, title: string) => {
+    await updateTodoMutation.mutateAsync({ id, title });
+  };
+  
+  // Todo削除関数
+  const deleteTodo = async (id: number) => {
+    await deleteTodoMutation.mutateAsync(id);
+  };
+  
+  // Todo完了状態切り替え関数
+  const toggleTodo = async (id: number) => {
+    await toggleTodoMutation.mutateAsync(id);
+  };
 
   return {
-    todos: todosQuery.data || [],
-    isLoading: todosQuery.isLoading,
-    isError: todosQuery.isError,
-    error: todosQuery.error,
-    createTodo: createTodoMutation.mutate,
-    updateTodo: updateTodoMutation.mutate,
-    deleteTodo: deleteTodoMutation.mutate,
+    todos,
+    isLoading,
+    createTodo,
+    updateTodo,
+    deleteTodo,
+    toggleTodo,
+    isCreating: createTodoMutation.isPending,
+    isUpdating: updateTodoMutation.isPending,
+    isDeleting: deleteTodoMutation.isPending,
+    isToggling: toggleTodoMutation.isPending,
   };
-}
+};
