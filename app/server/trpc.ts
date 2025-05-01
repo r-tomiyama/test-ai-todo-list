@@ -1,6 +1,6 @@
-import { initTRPC } from '@trpc/server';
-import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { PrismaClient } from '../generated/prisma';
+import { initTRPC } from "@trpc/server";
+import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
+import { PrismaClient } from "../__generated__/prisma";
 
 // Prismaクライアントのグローバルインスタンスを作成
 const prisma = new PrismaClient();
@@ -15,7 +15,9 @@ export type TRPCContext = {
 /**
  * tRPCコンテキストの作成
  */
-export const createTRPCContext = async (opts: FetchCreateContextFnOptions): Promise<TRPCContext> => {
+export const createTRPCContext = async (
+  opts: FetchCreateContextFnOptions
+): Promise<TRPCContext> => {
   return {
     prisma,
   };

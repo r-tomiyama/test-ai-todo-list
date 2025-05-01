@@ -6,7 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint:typecheck": "tsc",
+    "lint:biome": "biome check .",
+    "lint": "run-s lint:*",
+    "fix:biome": "biome check --write .",
+    "fix:format": "biome format --write .",
+    "fix": "run-s fix:*"
   },
   "dependencies": {
     "@prisma/client": "^6.7.0",
@@ -22,10 +27,12 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "npm-run-all2": "^7.0.2",
     "prisma": "^6.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"

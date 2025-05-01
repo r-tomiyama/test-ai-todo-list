@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useState, ReactNode } from 'react';
-import { httpBatchLink } from '@trpc/client';
-import { trpc } from '../utils/trpc';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { httpBatchLink } from "@trpc/client";
+import { type ReactNode, useState } from "react";
+import { trpc } from "../utils/trpc";
 
 interface QueryProviderProps {
   children: ReactNode;
@@ -27,7 +27,7 @@ export default function QueryProvider({ children }: QueryProviderProps) {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: '/api/trpc',
+          url: "/api/trpc",
           // 必要に応じてカスタムヘッダーを追加
           // headers() {
           //   return {

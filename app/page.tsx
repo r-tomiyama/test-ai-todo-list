@@ -5,14 +5,14 @@ import { useTodos } from "./hooks/useTodos";
 
 export default function Home() {
   const [newTodo, setNewTodo] = useState("");
-  const { 
-    todos, 
-    isLoading, 
-    createTodo, 
-    updateTodo, 
+  const {
+    todos,
+    isLoading,
+    createTodo,
+    updateTodo,
     deleteTodo,
     toggleTodo,
-    isCreating
+    isCreating,
   } = useTodos();
 
   // Todo追加の処理
@@ -24,7 +24,7 @@ export default function Home() {
 
   // Enterキーでの送信
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAddTodo();
     }
   };
@@ -43,8 +43,9 @@ export default function Home() {
           className="border border-gray-300 rounded-l p-2 flex-grow"
           disabled={isCreating}
         />
-        <button 
-          onClick={handleAddTodo} 
+        <button
+          type="button"
+          onClick={handleAddTodo}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
           disabled={isCreating}
         >
@@ -66,10 +67,13 @@ export default function Home() {
                 onChange={() => toggleTodo(todo.id)}
                 className="mr-3 h-5 w-5"
               />
-              <span className={`flex-grow ${todo.completed ? "line-through text-gray-500" : ""}`}>
+              <span
+                className={`flex-grow ${todo.completed ? "line-through text-gray-500" : ""}`}
+              >
                 {todo.title}
               </span>
               <button
+                type="button"
                 onClick={() => deleteTodo(todo.id)}
                 className="ml-2 text-red-500 hover:text-red-700"
               >
