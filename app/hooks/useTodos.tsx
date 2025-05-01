@@ -27,13 +27,17 @@ export const useTodos = () => {
   });
 
   // Todo作成関数
-  const createTodo = async (title: string) => {
-    await createTodoMutation.mutateAsync({ title });
+  const createTodo = async (title: string, description?: string, dueDate?: string) => {
+    await createTodoMutation.mutateAsync({ 
+      title,
+      description,
+      dueDate
+    });
   };
 
   // Todo更新関数
-  const updateTodo = async (id: number, title: string) => {
-    await updateTodoMutation.mutateAsync({ id, title });
+  const updateTodo = async (id: number, updates: { title?: string, description?: string, dueDate?: string }) => {
+    await updateTodoMutation.mutateAsync({ id, ...updates });
   };
 
   // Todo削除関数
