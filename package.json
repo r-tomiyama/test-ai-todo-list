@@ -36,5 +36,8 @@
     "prisma": "^6.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "volta": {
+    "node": "20.19.1"
   }
 }
