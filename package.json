@@ -6,6 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "migrate": "prisma-schema-fixer -f ./prisma/schema.prisma -c ./prisma/schema-fixer.config.js && prisma migrate dev",
+    "migrate:reset": "prisma migrate reset",
     "lint:typecheck": "tsc",
     "lint:biome": "biome check .",
     "lint": "run-s lint:*",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@onozaty/prisma-schema-fixer": "^0.2.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

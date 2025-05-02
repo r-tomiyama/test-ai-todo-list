@@ -1,3 +1,3 @@
 -- AlterTable
-ALTER TABLE "Todo" ADD COLUMN     "description" TEXT,
-ADD COLUMN     "dueDate" TIMESTAMP(3)
+ALTER TABLE "todos" ADD COLUMN     "description" TEXT,
+ADD COLUMN     "due_date" TIMESTAMPTZ

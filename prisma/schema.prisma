@@ -18,7 +18,9 @@ model Todo {
   id          Int       @id @default(autoincrement())
   title       String
   description String?
-  dueDate     DateTime?
+  dueDate     DateTime? @map("due_date") @db.Timestamptz()
   completed   Boolean   @default(false)
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("todos")
 }
