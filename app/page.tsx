@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <main className="max-w-6xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">tRPC Todo リスト</h1>
+      <h1 className="text-2xl font-bold mb-4">Todo リスト</h1>
 
       <TodoForm onAddTodo={handleAddTodo} isCreating={isCreating} />
 
