@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
+    "dev": "prisma generate && next dev --turbopack",
     "start": "next start",
     "migrate": "prisma-schema-fixer -f ./prisma/schema.prisma -c ./prisma/schema-fixer.config.js && prisma migrate dev",
     "migrate:reset": "prisma migrate reset",
@@ -13,10 +12,14 @@
     "lint": "run-s lint:*",
     "fix:biome": "biome check --write .",
     "fix:format": "biome format --write .",
-    "fix": "run-s fix:*"
+    "fix": "run-s fix:*",
+    "predeploy:migrate": "sh scripts/migrate-to-supabase.sh",
+    "deploy:migrate": "supabase db push",
+    "deploy:build": "sh scripts/build.sh",
+    "deploy:code": "wrangler pages deploy",
+    "deploy": "run-s deploy:*"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0",
     "@tanstack/react-query": "^5.74.11",
     "@tanstack/react-query-devtools": "^5.74.11",
     "@trpc/client": "^11.1.2",
@@ -31,7 +34,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@cloudflare/next-on-pages": "^1.13.12",
     "@onozaty/prisma-schema-fixer": "^0.2.0",
+    "@prisma/client": "^6.7.0",
+    "@prisma/extension-accelerate": "^1.3.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -39,7 +45,8 @@
     "npm-run-all2": "^7.0.2",
     "prisma": "^6.7.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.14.1"
   },
   "volta": {
     "node": "20.19.1"

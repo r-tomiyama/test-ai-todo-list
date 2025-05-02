@@ -42,3 +42,5 @@ next-env.d.ts
 
 # generated files
 app/__generated__/
+
+supabase/
