@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f8f9fa;
   --foreground: #171717;
+  
+  /* パステルカラーのテーマ */
+  --pastel-mint: #b5ead7;
+  --pastel-pink: #ffb7c5;
+  --pastel-yellow: #fdffb6;
+  --pastel-lavender: #c7ceea;
+  --pastel-purple: #b8a2db;
+  --pastel-peach: #ffd8b1;
+  
+  --button-bg: #76c2af;
+  --button-hover: #5aab99;
+  --card-bg: #ffffff;
+  --card-border: #e2f3ed;
+  --card-completed-bg: #f0f7f4;
 }
 
 @theme inline {
@@ -16,11 +30,105 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --button-bg: #4a8d7b;
+    --button-hover: #3a7262;
+    --card-bg: #1a1a1a;
+    --card-border: #2a2a2a;
+    --card-completed-bg: #222222;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+}
+
+/* タイトルのカスタムスタイル */
+.app-title {
+  font-family: var(--font-kosugi-maru), sans-serif;
+  color: var(--pastel-purple);
+  letter-spacing: 0.05em;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* カスタムCSS */
+.todo-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.dinosaur-bg {
+  position: absolute;
+  left: -20px;
+  bottom: -20px;
+  width: 300px;
+  height: 400px;
+  z-index: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.todo-content {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-pastel {
+  background-color: var(--button-bg);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-pastel:hover {
+  background-color: var(--button-hover);
+}
+
+.todo-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.todo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.todo-card.completed {
+  background-color: var(--card-completed-bg);
+}
+
+/* カスタムチェックボックス */
+.custom-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--pastel-mint);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox:checked {
+  background-color: var(--pastel-mint);
+}
+
+.custom-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
 }
