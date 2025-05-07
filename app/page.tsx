@@ -48,20 +48,21 @@ export default function Home() {
   const completedTodos = todos?.filter((todo) => todo.completed) || [];
 
   return (
-    <main className="max-w-6xl mx-auto p-4">
-      <div className="todo-container">
+    <main className="py-12">
+      <div className="todo-container relative min-h-[700px]">
+        {/* 恐竜のイラスト（大きく表示） */}
         <div className="dinosaur-bg">
           <Image
             src="/dinosaur.png"
             alt="恐竜のイラスト"
-            width={300}
-            height={400}
+            width={500}
+            height={700}
             priority
           />
         </div>
         
         <div className="todo-content">
-          <h1 className="app-title">Todo リスト</h1>
+          <h1 className="app-title mb-6">Todo リスト</h1>
 
           <TodoForm onAddTodo={handleAddTodo} isCreating={isCreating} />
 
@@ -69,51 +70,52 @@ export default function Home() {
             <div className="text-center py-4">
               <p>読み込み中...</p>
             </div>
-          ) : incompleteTodos.length > 0 || completedTodos.length > 0 ? (
-            <>
+          ) : (
+            <div className="mt-4">
               {/* 未完了のTODO */}
-              {incompleteTodos.length > 0 && (
+              {incompleteTodos.length > 0 ? (
+                <div className="space-y-2.5 mb-4">
+                  {incompleteTodos.map((todo, index) => (
+                    <TodoItem
+                      key={todo.id}
+                      todo={todo}
+                      onTodoClick={handleTodoClick}
+                      toggleTodo={toggleTodo}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center py-2 text-gray-500">
+                  未完了のタスクがありません
+                </p>
+              )}
+
+              {/* 完了済みのTODO */}
+              {completedTodos.length > 0 && (
                 <>
-                  <h2 className="text-xl font-semibold mb-3 mt-6 text-[#6b8e7d]">
-                    未完了のタスク
+                  <h2 className="text-xl font-semibold mb-3 mt-8 text-gray-500">
+                    完了したタスク
                   </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                    {incompleteTodos.map((todo) => (
+                  <div className="space-y-2.5">
+                    {completedTodos.map((todo, index) => (
                       <TodoItem
                         key={todo.id}
                         todo={todo}
                         onTodoClick={handleTodoClick}
                         toggleTodo={toggleTodo}
-                        deleteTodo={deleteTodo}
+                        index={index}
                       />
                     ))}
                   </div>
                 </>
               )}
 
-              {/* 完了済みのTODO */}
-              {completedTodos.length > 0 && (
-                <>
-                  <h2 className="text-xl font-semibold mb-3 mt-6 text-[#6b8e7d]">
-                    完了したタスク
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {completedTodos.map((todo) => (
-                      <TodoItem
-                        key={todo.id}
-                        todo={todo}
-                        onTodoClick={handleTodoClick}
-                        toggleTodo={toggleTodo}
-                        deleteTodo={deleteTodo}
-                      />
-                    ))}
-                  </div>
-                </>
+              {incompleteTodos.length === 0 && completedTodos.length === 0 && (
+                <div className="text-center py-6 text-gray-500">
+                  <p>タスクがありません。新しいタスクを追加しましょう！</p>
+                </div>
               )}
-            </>
-          ) : (
-            <div className="text-center py-6 text-gray-500">
-              <p>タスクがありません。新しいタスクを追加しましょう！</p>
             </div>
           )}
         </div>
@@ -125,6 +127,7 @@ export default function Home() {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onUpdate={updateTodo}
+            onDelete={deleteTodo}
           />
         )}
       </div>

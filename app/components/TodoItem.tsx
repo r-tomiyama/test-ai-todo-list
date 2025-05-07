@@ -6,100 +6,72 @@ interface TodoItemProps {
   todo: Todo;
   onTodoClick: (todo: Todo) => void;
   toggleTodo: (id: number) => void;
-  deleteTodo: (id: number) => void;
+  index?: number;
 }
 
 const formatDate = (date: Date) => {
-  return date.toLocaleDateString();
+  return date.toLocaleDateString('ja-JP', { 
+    year: 'numeric', 
+    month: '2-digit', 
+    day: '2-digit' 
+  }).replace(/\//g, '/');
 };
 
 const TodoItem = ({
   todo,
   onTodoClick,
   toggleTodo,
-  deleteTodo,
+  index = 0,
 }: TodoItemProps) => {
-  // カラーマッピング - Todoごとに異なるパステルカラーを割り当てる
+  // インデックスに基づいて交互にカラーを設定
   const colorOptions = [
-    { bg: "bg-[#e2f3ed]", border: "border-[#b5ead7]" }, // ミント
-    { bg: "bg-[#f8e1e7]", border: "border-[#ffb7c5]" }, // ピンク
-    { bg: "bg-[#fdfde8]", border: "border-[#fdffb6]" }, // イエロー
-    { bg: "bg-[#e8ebf7]", border: "border-[#c7ceea]" }, // ラベンダー
-    { bg: "bg-[#fff2e6]", border: "border-[#ffd8b1]" }, // ピーチ
+    { bgColor: "#5FD6C6", textColor: "text-black" }, // teal
+    { bgColor: "#B08BE2", textColor: "text-black" }, // purple
   ];
   
-  // Todoのidを使用して一貫したカラーを選択
-  const colorIndex = todo.id % colorOptions.length;
-  const colorClasses = colorOptions[colorIndex];
+  // インデックスの偶数/奇数で色を交互に変更
+  const colorIndex = index % 2;
+  const todoColor = colorOptions[colorIndex];
 
   return (
-    <button
-      type="button"
+    <div 
+      className="todo-card mb-2.5 overflow-hidden cursor-pointer rounded-lg bg-white shadow-sm"
       onClick={() => onTodoClick(todo)}
-      aria-label={`${todo.title} - ${todo.completed ? "完了" : "未完了"}のタスク`}
-      className={`todo-card p-4 cursor-pointer w-full text-left ${
-        todo.completed ? "completed opacity-70" : `${colorClasses.bg} border-l-4 ${colorClasses.border}`
-      }`}
     >
-      <div className="flex items-center mb-2">
-        <div>
-          <input
-            type="checkbox"
-            checked={todo.completed}
-            onChange={(e) => {
-              e.stopPropagation(); // クリックイベントの伝播を止める
-              toggleTodo(todo.id);
-            }}
-            className="custom-checkbox mr-3"
-            aria-checked={todo.completed}
-          />
+      <div className="flex items-center">
+        {/* 左側のカラーマーカー */}
+        <div 
+          className="w-8 h-8 rounded-full flex-shrink-0 mx-3" 
+          style={{ backgroundColor: todoColor.bgColor }}
+        />
+        
+        <div className="flex-grow flex items-center justify-between p-3">
+          <div className="flex-grow pr-2">
+            <h3
+              className={`font-bold text-base ${
+                todo.completed ? "line-through text-gray-500" : todoColor.textColor
+              }`}
+            >
+              {todo.title}
+            </h3>
+            
+            {todo.description && (
+              <p className="text-sm text-gray-500 line-clamp-1">
+                {todo.description}
+              </p>
+            )}
+          </div>
+          
+          <div className="flex items-center">
+            {todo.dueDate && (
+              <span className="text-xs text-gray-500">
+                {formatDate(todo.dueDate)}
+              </span>
+            )}
+          </div>
         </div>
-        <h3
-          className={`font-medium text-lg flex-grow ${
-            todo.completed ? "line-through text-gray-500" : "text-[#4a4a4a]"
-          }`}
-        >
-          {todo.title}
-        </h3>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation(); // クリックイベントの伝播を止める
-            deleteTodo(todo.id);
-          }}
-          className="text-[#6b8e7d] hover:text-red-500 transition-colors ml-2 h-6 w-6 flex items-center justify-center rounded-full hover:bg-[#fff2]"
-        >
-          ✕
-        </button>
       </div>
-
-      {todo.description && (
-        <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-          {todo.description}
-        </p>
-      )}
-
-      {todo.dueDate && (
-        <div className="text-xs text-gray-500 mt-2 flex items-center">
-          <svg
-            className="w-3 h-3 mr-1"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <title>期日</title>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          {formatDate(todo.dueDate)}
-        </div>
-      )}
-    </button>
+    </div>
   );
 };
 
