@@ -1,8 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f7f1fb;
   --foreground: #171717;
+
+  /* Figmaデザインのカラー */
+  --purple-primary: #b08be2;
+  --teal-primary: #4ec5af;
+  --teal-light: #5fd6c6;
+  --text-gray: #757575;
+  --text-black: #000000;
+  --text-delete: #dd6666;
+
+  /* 元のパステルカラーテーマも残しておく */
+  --pastel-mint: #b5ead7;
+  --pastel-pink: #ffb7c5;
+  --pastel-yellow: #fdffb6;
+  --pastel-lavender: #c7ceea;
+  --pastel-purple: #b8a2db;
+  --pastel-peach: #ffd8b1;
+
+  --button-bg: var(--teal-primary);
+  --button-hover: #43b6a0;
+  --card-bg: #ffffff;
+  --card-border: #e2e2e2;
+  --card-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  --card-completed-bg: #f0f0f0;
 }
 
 @theme inline {
@@ -16,11 +39,173 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --button-bg: #4a8d7b;
+    --button-hover: #3a7262;
+    --card-bg: #1a1a1a;
+    --card-border: #2a2a2a;
+    --card-completed-bg: #222222;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", Arial, sans-serif;
+}
+
+/* タイトルのカスタムスタイル */
+.app-title {
+  font-family: var(--font-kosugi-maru), sans-serif;
+  color: var(--purple-primary);
+  letter-spacing: 0.05em;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+/* カスタムCSS */
+.todo-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.dinosaur-bg {
+  position: absolute;
+  left: -20px;
+  bottom: -200px;
+  width: 800px;
+  height: 700px;
+  z-index: 0;
+  opacity: 0.9;
+  pointer-events: none;
+  transform: rotate(0deg);
+}
+
+.todo-content {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  max-width: 500px;
+  width: 100%;
+  padding-left: 40px;
+}
+
+.btn-pastel {
+  background-color: var(--button-bg);
+  color: white;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.btn-pastel:hover {
+  background-color: var(--button-hover);
+}
+
+.todo-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.todo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.todo-card.completed {
+  background-color: var(--card-completed-bg);
+}
+
+/* カスタムチェックボックス */
+.custom-checkbox {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--teal-light);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-checkbox:checked {
+  background-color: var(--teal-light);
+}
+
+.custom-checkbox:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+}
+
+/* 詳細を開くボタン */
+.details-toggle {
+  color: var(--teal-primary);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin: 8px 0;
+  background-color: transparent;
+  border: none;
+  padding: 8px 0;
+  border-radius: 0;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.details-toggle:hover {
+  opacity: 0.8;
+}
+
+.details-toggle-icon {
+  color: var(--teal-primary);
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+/* 詳細フォーム */
+.details-form {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 8px;
+}
+
+.details-form input,
+.details-form textarea {
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+/* 削除ボタン */
+.delete-btn {
+  color: var(--text-delete);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: rgba(221, 102, 102, 0.1);
 }

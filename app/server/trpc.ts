@@ -27,7 +27,7 @@ export const createTRPCContext = async (
 ): Promise<TRPCContext> => {
   return {
     prisma,
-  } as any; // TODO
+  } as TRPCContext;
 };
 
 /**

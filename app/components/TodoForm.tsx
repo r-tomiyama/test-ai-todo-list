@@ -36,50 +36,51 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
 
   return (
     <div className="mb-6">
-      <div className="flex">
+      <div className="flex gap-2">
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="新しいタスクを入力"
-          className="border border-gray-300 rounded-l p-2 flex-grow"
+          className="border border-[#CCCCCC] rounded-lg p-3 flex-grow focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
           disabled={isCreating}
         />
         <button
           type="button"
           onClick={handleAddTodo}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-r"
+          className="btn-pastel px-4 py-3 rounded-lg font-medium"
           disabled={isCreating}
         >
           追加
         </button>
       </div>
 
-      <div className="mt-2">
+      <div className="mt-3">
         <button
           type="button"
           onClick={() => setShowDetails(!showDetails)}
-          className="text-sm text-blue-500 hover:underline"
+          className="details-toggle w-full flex items-center justify-start text-green-500"
         >
-          {showDetails ? "詳細を隠す" : "詳細を追加 (任意)"}
+          <span className="details-toggle-icon">{showDetails ? "▼" : "▼"}</span>
+          {showDetails ? "詳細を閉じる" : "詳細を開く"}
         </button>
 
         {showDetails && (
-          <div className="mt-2 space-y-2">
-            <div>
+          <div className="details-form">
+            <div className="mb-3">
               <label
                 htmlFor="description"
-                className="block text-sm text-gray-600 mb-1"
+                className="block text-sm text-[#757575] mb-1"
               >
-                説明
+                詳細
               </label>
               <textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="タスクの説明（任意）"
-                className="w-full border border-gray-300 rounded p-2 text-sm"
+                placeholder="詳細"
+                className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
                 disabled={isCreating}
                 rows={2}
               />
@@ -87,16 +88,16 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
             <div>
               <label
                 htmlFor="dueDate"
-                className="block text-sm text-gray-600 mb-1"
+                className="block text-sm text-[#757575] mb-1"
               >
-                期日（任意）
+                期日
               </label>
               <input
                 type="date"
                 id="dueDate"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full border border-gray-300 rounded p-2 text-sm"
+                className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
                 disabled={isCreating}
               />
             </div>

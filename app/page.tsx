@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import type { Todo } from "./__generated__/prisma";
 import TodoForm from "./components/TodoForm";
@@ -47,72 +48,90 @@ export default function Home() {
   const completedTodos = todos?.filter((todo) => todo.completed) || [];
 
   return (
-    <main className="max-w-6xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Todo リスト</h1>
-
-      <TodoForm onAddTodo={handleAddTodo} isCreating={isCreating} />
-
-      {isLoading ? (
-        <div className="text-center py-4">
-          <p>読み込み中...</p>
+    <main className="py-12">
+      <div className="todo-container relative min-h-[700px]">
+        {/* 恐竜のイラスト（大きく表示） */}
+        <div className="dinosaur-bg">
+          <Image
+            src="/dinosaur.png"
+            alt="恐竜のイラスト"
+            width={500}
+            height={700}
+            priority
+          />
         </div>
-      ) : incompleteTodos.length > 0 || completedTodos.length > 0 ? (
-        <>
-          {/* 未完了のTODO */}
-          {incompleteTodos.length > 0 && (
-            <>
-              <h2 className="text-xl font-semibold mb-3 mt-6">
-                未完了のタスク
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-                {incompleteTodos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onTodoClick={handleTodoClick}
-                    toggleTodo={toggleTodo}
-                    deleteTodo={deleteTodo}
-                  />
-                ))}
-              </div>
-            </>
-          )}
 
-          {/* 完了済みのTODO */}
-          {completedTodos.length > 0 && (
-            <>
-              <h2 className="text-xl font-semibold mb-3 mt-6">
-                完了したタスク
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {completedTodos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onTodoClick={handleTodoClick}
-                    toggleTodo={toggleTodo}
-                    deleteTodo={deleteTodo}
-                  />
-                ))}
-              </div>
-            </>
+        {/* タイトルを外側に移動して中央寄せ */}
+        <h1 className="app-title text-3xl font-bold text-center mb-8">
+          Todoリスト
+        </h1>
+
+        <div className="todo-content">
+          <TodoForm onAddTodo={handleAddTodo} isCreating={isCreating} />
+
+          {isLoading ? (
+            <div className="text-center py-4">
+              <p>読み込み中...</p>
+            </div>
+          ) : (
+            <div className="mt-4 h-[400px] overflow-y-auto pr-2">
+              {/* 未完了のTODO */}
+              {incompleteTodos.length > 0 ? (
+                <div className="space-y-2.5 mb-4">
+                  {incompleteTodos.map((todo, index) => (
+                    <TodoItem
+                      key={todo.id}
+                      todo={todo}
+                      onTodoClick={handleTodoClick}
+                      toggleTodo={toggleTodo}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+
+              {/* 完了済みのTODO */}
+              {completedTodos.length > 0 && (
+                <>
+                  <h2 className="text-xl font-semibold mb-3 mt-8 text-gray-500">
+                    完了したタスク
+                  </h2>
+                  <div className="space-y-2.5">
+                    {completedTodos.map((todo, index) => (
+                      <TodoItem
+                        key={todo.id}
+                        todo={todo}
+                        onTodoClick={handleTodoClick}
+                        toggleTodo={toggleTodo}
+                        index={index}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {incompleteTodos.length === 0 && completedTodos.length === 0 && (
+                <div className="text-center py-6 text-gray-500">
+                  <p>タスクがありません。新しいタスクを追加しましょう！</p>
+                </div>
+              )}
+            </div>
           )}
-        </>
-      ) : (
-        <div className="text-center py-6 text-gray-500">
-          <p>タスクがありません。新しいタスクを追加しましょう！</p>
         </div>
-      )}
 
-      {/* 選択されたTodoを編集するモーダル */}
-      {selectedTodo && (
-        <TodoModal
-          todo={selectedTodo}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onUpdate={updateTodo}
-        />
-      )}
+        {/* 選択されたTodoを編集するモーダル */}
+        {selectedTodo && (
+          <TodoModal
+            todo={selectedTodo}
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onUpdate={updateTodo}
+            onDelete={deleteTodo}
+          />
+        )}
+      </div>
     </main>
   );
 }
