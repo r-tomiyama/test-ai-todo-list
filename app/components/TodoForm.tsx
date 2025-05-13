@@ -1,29 +1,43 @@
 "use client";
 
 import { useState } from "react";
+import TodoDetailsForm from "./TodoDetailsForm";
+import Button from "./Button";
+import { TodoFormData, TodoInputProps } from "../types/todo";
 
-interface TodoFormProps {
+interface TodoFormProps extends TodoInputProps {
   onAddTodo: (
     title: string,
     description: string,
     dueDate: string
   ) => Promise<void>;
-  isCreating: boolean;
 }
 
 const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
-  const [newTodo, setNewTodo] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [formData, setFormData] = useState<TodoFormData>({
+    title: "",
+    description: "",
+    dueDate: ""
+  });
   const [showDetails, setShowDetails] = useState(false);
+
+  // 入力値の変更ハンドラー
+  const handleChange = (field: keyof TodoFormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   // Todo追加の処理
   const handleAddTodo = async () => {
-    if (!newTodo.trim()) return;
-    await onAddTodo(newTodo.trim(), description, dueDate);
-    setNewTodo("");
-    setDescription("");
-    setDueDate("");
+    if (!formData.title.trim()) return;
+    
+    await onAddTodo(
+      formData.title.trim(), 
+      formData.description, 
+      formData.dueDate
+    );
+    
+    // フォームをリセット
+    setFormData({ title: "", description: "", dueDate: "" });
     setShowDetails(false);
   };
 
@@ -39,21 +53,21 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
       <div className="flex gap-2">
         <input
           type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
+          value={formData.title}
+          onChange={(e) => handleChange("title", e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="新しいタスクを入力"
           className="border border-[#CCCCCC] rounded-lg p-3 flex-grow focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
           disabled={isCreating}
         />
-        <button
-          type="button"
+        <Button 
           onClick={handleAddTodo}
-          className="btn-pastel px-4 py-3 rounded-lg font-medium"
+          variant="primary"
           disabled={isCreating}
+          isLoading={isCreating}
         >
           追加
-        </button>
+        </Button>
       </div>
 
       <div className="mt-3">
@@ -67,41 +81,13 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
         </button>
 
         {showDetails && (
-          <div className="details-form">
-            <div className="mb-3">
-              <label
-                htmlFor="description"
-                className="block text-sm text-[#757575] mb-1"
-              >
-                詳細
-              </label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="詳細"
-                className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
-                disabled={isCreating}
-                rows={2}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="dueDate"
-                className="block text-sm text-[#757575] mb-1"
-              >
-                期日
-              </label>
-              <input
-                type="date"
-                id="dueDate"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
-                disabled={isCreating}
-              />
-            </div>
-          </div>
+          <TodoDetailsForm
+            description={formData.description}
+            setDescription={(value) => handleChange("description", value)}
+            dueDate={formData.dueDate}
+            setDueDate={(value) => handleChange("dueDate", value)}
+            isCreating={isCreating}
+          />
         )}
       </div>
     </div>
