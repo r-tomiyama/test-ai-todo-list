@@ -1,12 +1,15 @@
 "use client";
 
 import { TodoInputProps } from "../types/todo";
+import { useProjects } from "../hooks/useProjects";
 
 interface TodoDetailsFormProps extends TodoInputProps {
   description: string;
   setDescription: (description: string) => void;
   dueDate: string;
   setDueDate: (dueDate: string) => void;
+  projectId?: number;
+  setProjectId?: (projectId: number | undefined) => void;
 }
 
 const TodoDetailsForm = ({
@@ -14,8 +17,12 @@ const TodoDetailsForm = ({
   setDescription,
   dueDate,
   setDueDate,
+  projectId,
+  setProjectId,
   isCreating,
 }: TodoDetailsFormProps) => {
+  const { projects } = useProjects();
+
   return (
     <div className="details-form">
       <div className="mb-3">
@@ -30,12 +37,12 @@ const TodoDetailsForm = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="詳細"
-          className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
+          className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
           disabled={isCreating}
           rows={2}
         />
       </div>
-      <div>
+      <div className="mb-3">
         <label
           htmlFor="dueDate"
           className="block text-sm text-[#757575] mb-1"
@@ -47,10 +54,37 @@ const TodoDetailsForm = ({
           id="dueDate"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
-          className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
+          className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
           disabled={isCreating}
         />
       </div>
+      {setProjectId && (
+        <div>
+          <label
+            htmlFor="project"
+            className="block text-sm text-[#757575] mb-1"
+          >
+            プロジェクト
+          </label>
+          <select
+            id="project"
+            value={projectId || ""}
+            onChange={(e) => {
+              const value = e.target.value ? parseInt(e.target.value) : undefined;
+              setProjectId(value);
+            }}
+            className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+            disabled={isCreating}
+          >
+            <option value="">未分類</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   );
 };

@@ -39,10 +39,10 @@ const Button: React.FC<ButtonProps> = ({
   
   // バリアントに基づくスタイル
   const variantStyles = {
-    primary: "bg-[#4EC5AF] text-white hover:bg-[#43b6a0] hover:shadow-sm focus:ring-2 focus:ring-[#4EC5AF] focus:ring-offset-2",
+    primary: "bg-[var(--primary-color)] text-white hover:bg-[var(--primary-color-hover)] hover:shadow-sm focus:ring-2 focus:ring-[var(--primary-color)] focus:ring-offset-2",
     secondary: "border border-[#CCCCCC] text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300 focus:ring-2 focus:ring-gray-200 focus:ring-offset-2",
     danger: "bg-[var(--text-delete)] text-white hover:bg-opacity-80 hover:shadow-sm focus:ring-2 focus:ring-red-500 focus:ring-offset-2",
-    text: "text-[#4EC5AF] hover:bg-[#F5FAF9] hover:text-[#3DB19B] focus:outline-none",
+    text: "text-[var(--primary-color)] hover:bg-opacity-10 hover:bg-[var(--primary-color)] hover:text-[var(--primary-color-hover)] focus:outline-none",
   };
 
   // 幅のスタイル

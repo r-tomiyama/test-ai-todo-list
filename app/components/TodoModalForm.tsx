@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { Todo } from "../__generated__/prisma";
 import Button from "./Button";
+import TextButton from "./TextButton";
+import TodoDetailsForm from "./TodoDetailsForm";
 
 interface TodoModalFormProps {
   todo: Todo;
@@ -13,6 +15,7 @@ interface TodoModalFormProps {
     description: string;
     dueDate: string;
     completed: boolean;
+    projectId?: number;
   }) => void;
   onDelete: () => void;
   onCancel: () => void;
@@ -32,6 +35,7 @@ const TodoModalForm = ({
     todo.dueDate ? new Date(todo.dueDate).toISOString().split("T")[0] : ""
   );
   const [completed, setCompleted] = useState(todo.completed);
+  const [projectId, setProjectId] = useState<number | undefined>(todo.projectId || undefined);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +43,8 @@ const TodoModalForm = ({
       title,
       description,
       dueDate,
-      completed
+      completed,
+      projectId
     });
   };
 
@@ -63,34 +68,14 @@ const TodoModalForm = ({
       </div>
       
       <div className="mb-5">
-        <label
-          htmlFor="modal-description"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          説明（任意）
-        </label>
-        <textarea
-          id="modal-description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full border border-[#CCCCCC] rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
-          rows={4}
-        />
-      </div>
-      
-      <div className="mb-5">
-        <label
-          htmlFor="modal-dueDate"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          期日（任意）
-        </label>
-        <input
-          id="modal-dueDate"
-          type="date"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="w-full border border-[#CCCCCC] rounded-lg p-3 text-base focus:outline-none focus:ring-2 focus:ring-[#4EC5AF]"
+        <TodoDetailsForm
+          description={description}
+          setDescription={setDescription}
+          dueDate={dueDate}
+          setDueDate={setDueDate}
+          projectId={projectId}
+          setProjectId={setProjectId}
+          isCreating={false}
         />
       </div>
 

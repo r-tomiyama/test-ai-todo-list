@@ -3,7 +3,7 @@
 import type { Todo } from "../__generated__/prisma";
 
 interface TodoItemProps {
-  todo: Todo;
+  todo: Todo & { project?: { id: number; name: string } | null };
   onTodoClick: (todo: Todo) => void;
   toggleTodo: (id: number) => void;
   index?: number;
@@ -145,6 +145,15 @@ const TodoItem = ({
               <p className="text-sm text-gray-500 line-clamp-1">
                 {todo.description}
               </p>
+            )}
+            
+            {/* プロジェクト情報の表示をグレーに変更 */}
+            {todo.project && (
+              <div className="mt-1">
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                  {todo.project.name}
+                </span>
+              </div>
             )}
           </div>
 

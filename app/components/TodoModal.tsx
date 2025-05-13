@@ -15,6 +15,7 @@ interface TodoModalProps {
       description?: string;
       dueDate?: Date;
       completed?: boolean;
+      projectId?: number;
     }
   ) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
@@ -37,6 +38,7 @@ const TodoModal = ({
       description: string;
       dueDate: string;
       completed: boolean;
+      projectId?: number;
     }
   ) => {
     e.preventDefault();
@@ -47,6 +49,7 @@ const TodoModal = ({
         description: formData.description || undefined,
         dueDate: formData.dueDate ? new Date(formData.dueDate) : undefined,
         completed: formData.completed,
+        projectId: formData.projectId,
       });
       onClose();
     } catch (error) {

@@ -6,6 +6,7 @@ const todoInputSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   dueDate: z.string().optional(), // 日付文字列として受け取る
+  projectId: z.number().optional(), // プロジェクトID
 });
 
 // Todoの更新バリデーション用スキーマ
@@ -15,12 +16,30 @@ const todoUpdateSchema = z.object({
   description: z.string().optional(),
   dueDate: z.string().optional(),
   completed: z.boolean().optional(),
+  projectId: z.number().optional(), // プロジェクトID
 });
 
 export const todoRouter = router({
   // 全Todoの取得
   getAll: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.todo.findMany({
+      include: { project: true },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
+
+  // プロジェクトに紐づくTodoの取得
+  getByProject: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    return await ctx.prisma.todo.findMany({
+      where: { projectId: input },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
+
+  // 未分類のTodo（プロジェクトに紐付いていないもの）の取得
+  getUnassigned: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.todo.findMany({
+      where: { projectId: null },
       orderBy: { createdAt: "desc" },
     });
   }),
@@ -29,6 +48,7 @@ export const todoRouter = router({
   getById: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
     return await ctx.prisma.todo.findUnique({
       where: { id: input },
+      include: { project: true },
     });
   }),
 
@@ -42,6 +62,7 @@ export const todoRouter = router({
           description: input.description,
           // 文字列として受け取った日付をDate型に変換
           dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
+          projectId: input.projectId,
         },
       });
     }),
@@ -81,4 +102,17 @@ export const todoRouter = router({
       data: { completed: !todo.completed },
     });
   }),
+
+  // Todoをプロジェクトに割り当て
+  assignToProject: publicProcedure
+    .input(z.object({ 
+      todoId: z.number(),
+      projectId: z.number().nullable()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.todo.update({
+        where: { id: input.todoId },
+        data: { projectId: input.projectId },
+      });
+    }),
 });

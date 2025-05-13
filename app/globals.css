@@ -6,6 +6,8 @@
 
   /* Figmaデザインのカラー */
   --purple-primary: #b08be2;
+  --primary-color: #4ec5af;
+  --primary-color-hover: #43b6a0;
   --teal-primary: #4ec5af;
   --teal-light: #5fd6c6;
   --text-gray: #757575;
@@ -20,8 +22,8 @@
   --pastel-purple: #b8a2db;
   --pastel-peach: #ffd8b1;
 
-  --button-bg: var(--teal-primary);
-  --button-hover: #43b6a0;
+  --button-bg: var(--primary-color);
+  --button-hover: var(--primary-color-hover);
   --card-bg: #ffffff;
   --card-border: #e2e2e2;
   --card-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
