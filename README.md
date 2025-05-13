@@ -16,7 +16,7 @@ npm run dev
 ```sh
 # 事前準備
 
-brew install supabase/tap/supabas
+brew install supabase/tap/supabase
 supabase login
 supabase link --project-ref $PROJECT_REF
 
