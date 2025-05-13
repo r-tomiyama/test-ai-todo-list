@@ -146,7 +146,7 @@ const TodoItem = ({
                 {todo.description}
               </p>
             )}
-            
+
             {/* プロジェクト情報の表示をグレーに変更 */}
             {todo.project && (
               <div className="mt-1">

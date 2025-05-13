@@ -5,14 +5,12 @@ import { trpc } from "../utils/trpc";
 
 export const useTodos = (projectId?: number) => {
   const utils = trpc.useContext();
-  
+
   // 特定のプロジェクトのTodoを取得するか、プロジェクトIDがない場合は全てのTodoを取得
-  const { 
-    data: todos, 
-    isLoading,
-  } = projectId !== undefined
-    ? trpc.todo.getByProject.useQuery(projectId)
-    : trpc.todo.getAll.useQuery();
+  const { data: todos, isLoading } =
+    projectId !== undefined
+      ? trpc.todo.getByProject.useQuery(projectId)
+      : trpc.todo.getAll.useQuery();
 
   // Todo作成のミューテーション
   const createTodoMutation = trpc.todo.create.useMutation({

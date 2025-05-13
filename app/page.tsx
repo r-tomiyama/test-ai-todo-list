@@ -3,21 +3,23 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { Todo } from "./__generated__/prisma";
+import ProjectList from "./components/ProjectList";
 import TodoForm from "./components/TodoForm";
 import TodoItem from "./components/TodoItem";
 import TodoModal from "./components/TodoModal";
-import { useTodos } from "./hooks/useTodos";
-import ProjectList from "./components/ProjectList";
-import { Project } from "./types/todo";
 import { useProjects } from "./hooks/useProjects";
+import { useTodos } from "./hooks/useTodos";
+import { Project } from "./types/todo";
 
 export default function Home() {
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | undefined>(undefined);
-  
+  const [selectedProjectId, setSelectedProjectId] = useState<
+    number | undefined
+  >(undefined);
+
   const { projects, isLoading: isLoadingProjects } = useProjects();
-  
+
   const {
     todos,
     isLoading,
@@ -60,7 +62,7 @@ export default function Home() {
   // プロジェクト名を取得
   const getSelectedProjectName = () => {
     if (selectedProjectId === undefined) return "すべてのタスク";
-    const project = projects.find(p => p.id === selectedProjectId);
+    const project = projects.find((p) => p.id === selectedProjectId);
     return project ? project.name : "選択されたプロジェクト";
   };
 
@@ -91,30 +93,34 @@ export default function Home() {
           <div className="mb-10">
             <ProjectList />
           </div>
-          
+
           <div className="flex mb-6 items-center">
             <h2 className="text-2xl font-bold">{getSelectedProjectName()}</h2>
           </div>
-          
+
           {!isLoadingProjects && projects.length > 0 && (
             <div className="mb-6">
               <div className="flex flex-wrap gap-2">
-                <button 
+                <button
                   onClick={() => handleSelectProject(undefined)}
-                  className={`px-4 py-2 rounded-md ${selectedProjectId === undefined 
-                    ? 'bg-[var(--primary-color)] text-white' 
-                    : 'bg-gray-200 hover:bg-gray-300'}`}
+                  className={`px-4 py-2 rounded-md ${
+                    selectedProjectId === undefined
+                      ? "bg-[var(--primary-color)] text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
                 >
                   すべて
                 </button>
-                
-                {projects.map(project => (
-                  <button 
+
+                {projects.map((project) => (
+                  <button
                     key={project.id}
                     onClick={() => handleSelectProject(project.id)}
-                    className={`px-4 py-2 rounded-md ${selectedProjectId === project.id 
-                      ? 'bg-[var(--primary-color)] text-white' 
-                      : 'bg-gray-200 hover:bg-gray-300'}`}
+                    className={`px-4 py-2 rounded-md ${
+                      selectedProjectId === project.id
+                        ? "bg-[var(--primary-color)] text-white"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    }`}
                   >
                     {project.name}
                   </button>
@@ -169,11 +175,12 @@ export default function Home() {
                   </>
                 )}
 
-                {incompleteTodos.length === 0 && completedTodos.length === 0 && (
-                  <div className="text-center py-6 text-gray-500">
-                    <p>タスクがありません。新しいタスクを追加しましょう！</p>
-                  </div>
-                )}
+                {incompleteTodos.length === 0 &&
+                  completedTodos.length === 0 && (
+                    <div className="text-center py-6 text-gray-500">
+                      <p>タスクがありません。新しいタスクを追加しましょう！</p>
+                    </div>
+                  )}
               </div>
             )}
           </div>

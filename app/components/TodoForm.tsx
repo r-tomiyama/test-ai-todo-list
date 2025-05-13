@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import TodoDetailsForm from "./TodoDetailsForm";
-import Button from "./Button";
-import { TodoFormData, TodoInputProps, Project } from "../types/todo";
 import { useProjects } from "../hooks/useProjects";
+import { Project, type TodoFormData, type TodoInputProps } from "../types/todo";
+import Button from "./Button";
+import TodoDetailsForm from "./TodoDetailsForm";
 
 interface TodoFormProps extends TodoInputProps {
   onAddTodo: (
@@ -20,29 +20,37 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
     title: "",
     description: "",
     dueDate: "",
-    projectId: undefined
+    projectId: undefined,
   });
   const [showDetails, setShowDetails] = useState(false);
   const { projects } = useProjects();
 
   // 入力値の変更ハンドラー
-  const handleChange = (field: keyof TodoFormData, value: string | number | undefined) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleChange = (
+    field: keyof TodoFormData,
+    value: string | number | undefined
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   // Todo追加の処理
   const handleAddTodo = async () => {
     if (!formData.title.trim()) return;
-    
+
     await onAddTodo(
-      formData.title.trim(), 
-      formData.description, 
+      formData.title.trim(),
+      formData.description,
       formData.dueDate,
       formData.projectId
     );
-    
+
     // フォームをリセット
-    setFormData({ title: "", description: "", dueDate: "", projectId: undefined });
+    setFormData({
+      title: "",
+      description: "",
+      dueDate: "",
+      projectId: undefined,
+    });
     setShowDetails(false);
   };
 
@@ -65,7 +73,7 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
           className="border border-[#CCCCCC] rounded-lg p-3 flex-grow focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
           disabled={isCreating}
         />
-        <Button 
+        <Button
           onClick={handleAddTodo}
           variant="primary"
           disabled={isCreating}
@@ -94,16 +102,21 @@ const TodoForm = ({ onAddTodo, isCreating }: TodoFormProps) => {
               setDueDate={(value) => handleChange("dueDate", value)}
               isCreating={isCreating}
             />
-            
+
             <div className="mt-3">
-              <label htmlFor="projectId" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="projectId"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 プロジェクト
               </label>
               <select
                 id="projectId"
                 value={formData.projectId || ""}
                 onChange={(e) => {
-                  const value = e.target.value ? parseInt(e.target.value) : undefined;
+                  const value = e.target.value
+                    ? Number.parseInt(e.target.value)
+                    : undefined;
                   handleChange("projectId", value);
                 }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"

@@ -10,13 +10,16 @@ interface TodoModalFormProps {
   todo: Todo;
   isUpdating: boolean;
   isDeleting: boolean;
-  onSubmit: (e: React.FormEvent, formData: {
-    title: string;
-    description: string;
-    dueDate: string;
-    completed: boolean;
-    projectId?: number;
-  }) => void;
+  onSubmit: (
+    e: React.FormEvent,
+    formData: {
+      title: string;
+      description: string;
+      dueDate: string;
+      completed: boolean;
+      projectId?: number;
+    }
+  ) => void;
   onDelete: () => void;
   onCancel: () => void;
 }
@@ -35,7 +38,9 @@ const TodoModalForm = ({
     todo.dueDate ? new Date(todo.dueDate).toISOString().split("T")[0] : ""
   );
   const [completed, setCompleted] = useState(todo.completed);
-  const [projectId, setProjectId] = useState<number | undefined>(todo.projectId || undefined);
+  const [projectId, setProjectId] = useState<number | undefined>(
+    todo.projectId || undefined
+  );
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +49,7 @@ const TodoModalForm = ({
       description,
       dueDate,
       completed,
-      projectId
+      projectId,
     });
   };
 
@@ -66,7 +71,7 @@ const TodoModalForm = ({
           required
         />
       </div>
-      
+
       <div className="mb-5">
         <TodoDetailsForm
           description={description}
@@ -92,7 +97,7 @@ const TodoModalForm = ({
           <span className="text-base text-gray-700">完了</span>
         </label>
       </div>
-      
+
       <div className="flex justify-between items-center">
         <Button
           onClick={onDelete}
@@ -104,10 +109,7 @@ const TodoModalForm = ({
         </Button>
 
         <div className="flex space-x-4">
-          <Button
-            onClick={onCancel}
-            variant="secondary"
-          >
+          <Button onClick={onCancel} variant="secondary">
             キャンセル
           </Button>
           <Button

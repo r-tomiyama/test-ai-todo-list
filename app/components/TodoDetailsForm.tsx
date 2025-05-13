@@ -1,7 +1,7 @@
 "use client";
 
-import { TodoInputProps } from "../types/todo";
 import { useProjects } from "../hooks/useProjects";
+import type { TodoInputProps } from "../types/todo";
 
 interface TodoDetailsFormProps extends TodoInputProps {
   description: string;
@@ -43,10 +43,7 @@ const TodoDetailsForm = ({
         />
       </div>
       <div className="mb-3">
-        <label
-          htmlFor="dueDate"
-          className="block text-sm text-[#757575] mb-1"
-        >
+        <label htmlFor="dueDate" className="block text-sm text-[#757575] mb-1">
           期日
         </label>
         <input
@@ -70,7 +67,9 @@ const TodoDetailsForm = ({
             id="project"
             value={projectId || ""}
             onChange={(e) => {
-              const value = e.target.value ? parseInt(e.target.value) : undefined;
+              const value = e.target.value
+                ? Number.parseInt(e.target.value)
+                : undefined;
               setProjectId(value);
             }}
             className="w-full border border-[#CCCCCC] rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"

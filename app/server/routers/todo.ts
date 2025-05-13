@@ -29,12 +29,14 @@ export const todoRouter = router({
   }),
 
   // プロジェクトに紐づくTodoの取得
-  getByProject: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
-    return await ctx.prisma.todo.findMany({
-      where: { projectId: input },
-      orderBy: { createdAt: "desc" },
-    });
-  }),
+  getByProject: publicProcedure
+    .input(z.number())
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.todo.findMany({
+        where: { projectId: input },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
 
   // 未分類のTodo（プロジェクトに紐付いていないもの）の取得
   getUnassigned: publicProcedure.query(async ({ ctx }) => {
@@ -105,10 +107,12 @@ export const todoRouter = router({
 
   // Todoをプロジェクトに割り当て
   assignToProject: publicProcedure
-    .input(z.object({ 
-      todoId: z.number(),
-      projectId: z.number().nullable()
-    }))
+    .input(
+      z.object({
+        todoId: z.number(),
+        projectId: z.number().nullable(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       return await ctx.prisma.todo.update({
         where: { id: input.todoId },

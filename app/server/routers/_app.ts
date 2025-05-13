@@ -1,6 +1,6 @@
 import { router } from "../trpc";
-import { todoRouter } from "./todo";
 import { projectRouter } from "./project";
+import { todoRouter } from "./todo";
 
 // メインルーターの作成
 export const appRouter = router({

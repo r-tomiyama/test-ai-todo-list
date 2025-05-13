@@ -2,18 +2,21 @@
 "use client";
 
 import { useState } from "react";
+import { Project, type ProjectFormData } from "../types/todo";
 import { trpc } from "../utils/trpc";
-import { Project, ProjectFormData } from "../types/todo";
 
 export function useProjects() {
   const utils = trpc.useContext();
-  
+
   // プロジェクト一覧を取得
-  const { data: projects = [], isLoading } = trpc.project.getAll.useQuery(undefined, {
-    onError: (err) => {
-      console.error("Failed to fetch projects:", err);
-    },
-  });
+  const { data: projects = [], isLoading } = trpc.project.getAll.useQuery(
+    undefined,
+    {
+      onError: (err) => {
+        console.error("Failed to fetch projects:", err);
+      },
+    }
+  );
 
   // プロジェクト作成
   const createMutation = trpc.project.create.useMutation({
@@ -52,7 +55,9 @@ export function useProjects() {
   };
 
   // プロジェクトの更新
-  const updateProject = async (data: { id: number } & Partial<ProjectFormData>) => {
+  const updateProject = async (
+    data: { id: number } & Partial<ProjectFormData>
+  ) => {
     try {
       await updateMutation.mutateAsync(data);
       return true;
@@ -79,8 +84,8 @@ export function useProjects() {
     createProject,
     updateProject,
     deleteProject,
-    isCreating: createMutation.isLoading,
-    isUpdating: updateMutation.isLoading,
-    isDeleting: deleteMutation.isLoading,
+    isCreating: createMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    isDeleting: deleteMutation.isPending,
   };
 }

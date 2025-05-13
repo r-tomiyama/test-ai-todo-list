@@ -3,13 +3,14 @@
 
 import { useState } from "react";
 import { useProjects } from "../hooks/useProjects";
-import { Project, ProjectFormData } from "../types/todo";
+import type { Project, ProjectFormData } from "../types/todo";
+import Button from "./Button";
 import ProjectForm from "./ProjectForm";
 import TextButton from "./TextButton";
-import Button from "./Button";
 
 export default function ProjectList() {
-  const { projects, isLoading, createProject, updateProject, deleteProject } = useProjects();
+  const { projects, isLoading, createProject, updateProject, deleteProject } =
+    useProjects();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
 
@@ -29,7 +30,11 @@ export default function ProjectList() {
   };
 
   const handleDeleteProject = async (id: number) => {
-    if (confirm("このプロジェクトを削除してもよろしいですか？関連するタスクはプロジェクト未割り当てになります。")) {
+    if (
+      confirm(
+        "このプロジェクトを削除してもよろしいですか？関連するタスクはプロジェクト未割り当てになります。"
+      )
+    ) {
       await deleteProject(id);
     }
   };
@@ -45,7 +50,7 @@ export default function ProjectList() {
     <div className="mb-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">プロジェクト</h2>
-        <Button 
+        <Button
           variant="primary"
           onClick={() => {
             setShowAddForm(!showAddForm);
@@ -82,7 +87,10 @@ export default function ProjectList() {
           <p className="text-gray-500">プロジェクトがありません</p>
         ) : (
           projects.map((project) => (
-            <div key={project.id} className="bg-white border border-gray-200 rounded-lg p-4">
+            <div
+              key={project.id}
+              className="bg-white border border-gray-200 rounded-lg p-4"
+            >
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-lg font-medium">{project.name}</h3>

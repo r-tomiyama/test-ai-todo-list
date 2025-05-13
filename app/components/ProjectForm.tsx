@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { ProjectFormData } from "../types/todo";
+import type { ProjectFormData } from "../types/todo";
 
 interface ProjectFormProps {
   defaultValues?: {
@@ -13,13 +13,19 @@ interface ProjectFormProps {
   onCancel?: () => void;
 }
 
-export default function ProjectForm({ defaultValues, onSubmit, onCancel }: ProjectFormProps) {
+export default function ProjectForm({
+  defaultValues,
+  onSubmit,
+  onCancel,
+}: ProjectFormProps) {
   const [formData, setFormData] = useState<ProjectFormData>({
     name: defaultValues?.name || "",
     description: defaultValues?.description || "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -36,7 +42,10 @@ export default function ProjectForm({ defaultValues, onSubmit, onCancel }: Proje
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           プロジェクト名 *
         </label>
         <input
@@ -51,7 +60,10 @@ export default function ProjectForm({ defaultValues, onSubmit, onCancel }: Proje
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           説明
         </label>
         <textarea
