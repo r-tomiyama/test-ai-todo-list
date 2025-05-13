@@ -12,9 +12,7 @@ export function useProjects() {
   const { data: projects = [], isLoading } = trpc.project.getAll.useQuery(
     undefined,
     {
-      onError: (err) => {
-        console.error("Failed to fetch projects:", err);
-      },
+      // エラーハンドリングはコンポーネント内で行う
     }
   );
 

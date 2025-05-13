@@ -33,7 +33,7 @@ export interface ProjectFormData {
 export interface Project {
   id: number;
   name: string;
-  description?: string;
+  description?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

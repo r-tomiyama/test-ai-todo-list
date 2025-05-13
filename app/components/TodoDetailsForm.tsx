@@ -6,7 +6,7 @@ import type { TodoInputProps } from "../types/todo";
 interface TodoDetailsFormProps extends TodoInputProps {
   description: string;
   setDescription: (description: string) => void;
-  dueDate: string;
+  dueDate: string | undefined;
   setDueDate: (dueDate: string) => void;
   projectId?: number;
   setProjectId?: (projectId: number | undefined) => void;

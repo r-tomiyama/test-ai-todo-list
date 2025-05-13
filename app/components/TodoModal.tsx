@@ -36,7 +36,7 @@ const TodoModal = ({
     formData: {
       title: string;
       description: string;
-      dueDate: string;
+      dueDate: string | undefined;
       completed: boolean;
       projectId?: number;
     }
